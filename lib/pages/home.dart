@@ -85,12 +85,14 @@ class _HomeState extends State<Home> {
     excel.updateCell(sheet, CellIndex.indexByString("B1"), "category");
     excel.updateCell(sheet, CellIndex.indexByString("C1"), "note");
     excel.updateCell(sheet, CellIndex.indexByString("D1"), "amount");
+    int j = 1;
     for (int index = 0; this.transectionData.length > index; index++) {
       if (this.transectionData[index].category == flag || flag == "ALL") {
-        excel.updateCell(sheet, CellIndex.indexByColumnRow(columnIndex: 0, rowIndex: index + 1), this.transectionData[index].flag);
-        excel.updateCell(sheet, CellIndex.indexByColumnRow(columnIndex: 1, rowIndex: index + 1), this.transectionData[index].category);
-        excel.updateCell(sheet, CellIndex.indexByColumnRow(columnIndex: 2, rowIndex: index + 1), this.transectionData[index].note);
-        excel.updateCell(sheet, CellIndex.indexByColumnRow(columnIndex: 3, rowIndex: index + 1), this.transectionData[index].amount);
+        excel.updateCell(sheet, CellIndex.indexByColumnRow(columnIndex: 0, rowIndex: j), this.transectionData[index].flag);
+        excel.updateCell(sheet, CellIndex.indexByColumnRow(columnIndex: 1, rowIndex: j), this.transectionData[index].category);
+        excel.updateCell(sheet, CellIndex.indexByColumnRow(columnIndex: 2, rowIndex: j), this.transectionData[index].note);
+        excel.updateCell(sheet, CellIndex.indexByColumnRow(columnIndex: 3, rowIndex: j), this.transectionData[index].amount);
+        j = j + 1;
       }
     }
     excel.encode().then((onValue) async {
@@ -98,7 +100,9 @@ class _HomeState extends State<Home> {
       File("${dir}/excel.xlsx")
         ..createSync(recursive: true)
         ..writeAsBytesSync(onValue);
-      await OpenFile.open("${dir}/excel.xlsx", type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
+      var a = await OpenFile.open("${dir}/excel.xlsx", type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
+      print(a.hashCode);
+      print(a.type);
       setState(() {
         this.fileLoaddin = false;
       });
